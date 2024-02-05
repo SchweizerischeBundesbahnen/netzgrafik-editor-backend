@@ -1,0 +1,20 @@
+services:
+  db:
+    image: postgres:15
+    environment:
+      - POSTGRES_USER=netzgrafikeditor
+      - POSTGRES_PASSWORD=netzgrafikeditor
+      - POSTGRES_DB=netzgrafikeditor
+    ports:
+      - "5432:5432"
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:23.0
+    command: start-dev --import-realm
+    ports:
+      - 8081:8080
+    volumes:
+      - ./keycloak/config/netzgrafikeditor-realm.json:/opt/keycloak/data/import/netzgrafikeditor-realm.json
+    environment:
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=netzgrafikeditor

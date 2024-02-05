@@ -1,0 +1,12 @@
+/target
+.metadata
+.settings
+.classpath
+.project
+.idea
+*.iml
+*.bak
+.springBeans
+/config/application*.yml
+/config/application*.properties
+localdb/db_pw

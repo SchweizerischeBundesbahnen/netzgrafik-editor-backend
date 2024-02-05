@@ -1,0 +1,31 @@
+endpoints:
+  web:
+    cors:
+      allowed-origins: http://localhost:4200
+
+auth:
+  audience:
+    service-name: fc44839c-e95f-4854-a52d-449867a9aa62
+
+springdoc:
+  swagger-ui:
+    enabled: true
+    oauth:
+      use-pkce-with-authorization-code-grant: true
+      # Client-ID of client that is allowed to access this API ('clientId' value returned by the Azure AD self-service API)
+      client-id: netzgrafikeditor
+  api-docs:
+    enabled: true
+  oAuthFlow:
+    authorizationUrl: http://localhost:8081/realms/netzgrafikeditor/protocol/openid-connect/auth
+    tokenUrl: http://localhost:8081/realms/netzgrafikeditor/protocol/openid-connect/token
+
+spring:
+  datasource:
+    username: netzgrafikeditor
+    password: netzgrafikeditor
+    url: jdbc:postgresql://localhost/netzgrafikeditor
+
+logging:
+  level:
+    org.jooq.tools.LoggerListener: DEBUG
