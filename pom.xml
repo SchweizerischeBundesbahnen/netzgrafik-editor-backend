@@ -24,6 +24,8 @@
         <!--suppress UnresolvedMavenProperty -->
         <flyway.password>${DB_PASSWORD}</flyway.password>
         <springdoc-openapi.version>2.2.0</springdoc-openapi.version>
+        <image.namespace>ghcr.io/schweizerischebundesbahnen</image.namespace>
+        <image.version>${project.version}</image.version>
     </properties>
 
     <dependencies>
@@ -260,6 +262,48 @@
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
+        </profile>
+        <profile>
+            <id>github-image-preview</id>
+            <activation>
+                <property>
+                    <name>github.image.preview</name>
+                    <value>true</value>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>spring-boot-maven-plugin</artifactId>
+                        <configuration>
+                            <imageName>${image.namespace}/${project.artifactId}-preview:${image.version}</imageName>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>github-image-latest</id>
+            <activation>
+                <property>
+                    <name>github.image.release</name>
+                    <value>true</value>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>spring-boot-maven-plugin</artifactId>
+                        <configuration>
+                            <imageName>${image.namespace}/${project.artifactId}</imageName>
+                            <tags>
+                              ${image.namespace}/${project.artifactId}:${image.version},${image.namespace}/${project.artifactId}:latest
+                            </tags>
+                            <publish>true</publish>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
     </profiles>
 
