@@ -37,7 +37,7 @@ This repository contains the source for the backend API for the [Netzgrafik-Edit
 
 1. Start the local development environment (PostgreSQL, Keycloak):
    ```shell
-   docker-compose up -d
+   docker compose up -d
    ```
 
 1. Setup environment variables
