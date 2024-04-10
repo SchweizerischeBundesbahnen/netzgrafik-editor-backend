@@ -31,7 +31,8 @@ jobs:
       # GitHub Container Registry ghcr.io as a preview image with the tag name 'pr{pull request number}'.
       - name: Login to GitHub Container Registry
         if: github.event_name == 'pull_request' && !github.event.pull_request.head.repo.fork
-        run: echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io --username ${{ github.actor }} --password-stdin
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u $ --password-stdin
+
       - name: Create container image
         if: github.event_name == 'pull_request'
         run: |
