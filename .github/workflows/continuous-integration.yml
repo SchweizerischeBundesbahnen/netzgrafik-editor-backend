@@ -27,12 +27,6 @@ jobs:
       - name: Run the Maven verify phase
         run: mvn --batch-mode --update-snapshots verify
 
-      # For pull requests we create a container image and if it is not from a fork, we push it to the
-      # GitHub Container Registry ghcr.io as a preview image with the tag name 'pr{pull request number}'.
-      - name: Login to GitHub Container Registry
-        if: github.event_name == 'pull_request' && !github.event.pull_request.head.repo.fork
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u $ --password-stdin
-
       - name: Create container image
         if: github.event_name == 'pull_request'
         run: |
@@ -40,4 +34,7 @@ jobs:
             -Dmaven.test.skip=true \
             -Dgithub.image.preview=true \
             -Dimage.version=pr${{ github.event.workflow_run.pull_requests[0].number }} \
-            -Dspring-boot.build-image.publish=${{ github.event.pull_request.head.repo.fork && 'false' || 'true' }}
+            -Dspring-boot.build-image.publish=${{ github.event.pull_request.head.repo.fork && 'false' || 'true' }} \
+            -Ddocker.publishRegistry.username="none" \
+            -Ddocker.publishRegistry.password="${{ secrets.GITHUB_TOKEN}}" \
+            -Ddocker.publishRegistry.url="ghcr.io" \
