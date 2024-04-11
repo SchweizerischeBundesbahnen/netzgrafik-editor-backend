@@ -8,7 +8,7 @@
         <relativePath /> <!-- lookup parent from repository -->
     </parent>
     <groupId>ch.sbb.pfi.netzgrafikeditor</groupId>
-    <artifactId>netzgrafik-backend</artifactId>
+    <artifactId>netzgrafik-editor-backend</artifactId>
     <version>2.2.0-SNAPSHOT</version>
     <name>netzgrafik-backend</name>
     <description>Netzgrafik-Editor Backend</description>
@@ -277,7 +277,7 @@
                         <groupId>org.springframework.boot</groupId>
                         <artifactId>spring-boot-maven-plugin</artifactId>
                         <configuration>
-                            <imageName>${image.namespace}/${project.artifactId}-preview:${image.version}</imageName>
+                            <imageName>${image.namespace}/${project.artifactId}:preview-${image.version}</imageName>
                         </configuration>
                     </plugin>
                 </plugins>
