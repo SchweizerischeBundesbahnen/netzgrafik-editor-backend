@@ -33,15 +33,22 @@ jobs:
       - uses: actions/setup-java@v3
         with:
           java-version: '21'
-          # TODO: Is this the right distribution for this project?
           distribution: 'temurin'
           cache: 'maven'
 
       - name: Login to GitHub Container Registry
-        run: echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io --username ${{ github.actor }} --password-stdin
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u $ --password-stdin
       - name: Create container image
         run: |
+          IMAGE_ID=ghcr.io/${{ github.repository }}
+          # Convert to lowercase
+          IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
+
           mvn spring-boot:build-image \
             -Dmaven.test.skip=true \
-            -Dgithub.image.release=true \
-            -Dimage.version=$VERSION
+            -Dspring-boot.build-image.imageName=$IMAGE_ID
+
+          echo IMAGE_ID=$IMAGE_ID
+          echo VERSION=$VERSION
+          docker tag $IMAGE_ID $IMAGE_ID:$VERSION
+          docker push $IMAGE_ID:$VERSION

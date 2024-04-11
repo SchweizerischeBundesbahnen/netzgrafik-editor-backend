@@ -36,10 +36,10 @@ jobs:
       - name: Create container image
         if: github.event_name == 'pull_request'
         run: |
-          IMAGE_ID=ghcr.io/${{ github.repository }}
+          IMAGE_ID=ghcr.io/${{ github.repository }}-preview
           # Convert to lowercase
           IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
-          VERSION="pr${{ github.event.workflow_run.pull_requests[0].number }}"
+          VERSION="pr${{ github.event.number }}"
 
           mvn spring-boot:build-image \
             -Dmaven.test.skip=true \
