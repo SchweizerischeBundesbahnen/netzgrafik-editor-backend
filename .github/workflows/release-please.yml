@@ -44,11 +44,13 @@ jobs:
           # Convert to lowercase
           IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
 
-          mvn spring-boot:build-image \
-            -Dmaven.test.skip=true \
-            -Dspring-boot.build-image.imageName=$IMAGE_ID
-
           echo IMAGE_ID=$IMAGE_ID
           echo VERSION=$VERSION
-          docker tag $IMAGE_ID $IMAGE_ID:$VERSION
-          docker push $IMAGE_ID:$VERSION
+
+          mvn spring-boot:build-image \
+            -Dmaven.test.skip=true \
+            -Dspring-boot.build-image.imageName=$IMAGE_ID:$VERSION \
+            -Dspring-boot.build-image.publish=true
+
+          docker tag $IMAGE_ID $IMAGE_ID:latest
+          docker push $IMAGE_ID:latest
