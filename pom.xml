@@ -146,6 +146,13 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <image>
+                        <env>
+                            <BP_OCI_SOURCE>https://github.com/SchweizerischeBundesbahnen/netzgrafik-editor-backend</BP_OCI_SOURCE>
+                        </env>
+                    </image>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.flywaydb</groupId>
@@ -262,50 +269,6 @@
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
-        </profile>
-        <profile>
-            <id>github-image-preview</id>
-            <activation>
-                <property>
-                    <name>github.image.preview</name>
-                    <value>true</value>
-                </property>
-            </activation>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.springframework.boot</groupId>
-                        <artifactId>spring-boot-maven-plugin</artifactId>
-                        <configuration>
-                            <imageName>${image.namespace}/${project.artifactId}:preview-${image.version}</imageName>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-        <profile>
-            <id>github-image-latest</id>
-            <activation>
-                <property>
-                    <name>github.image.release</name>
-                    <value>true</value>
-                </property>
-            </activation>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.springframework.boot</groupId>
-                        <artifactId>spring-boot-maven-plugin</artifactId>
-                        <configuration>
-                            <imageName>${image.namespace}/${project.artifactId}</imageName>
-                            <tags>
-                              ${image.namespace}/${project.artifactId}:${image.version},${image.namespace}/${project.artifactId}:latest
-                            </tags>
-                            <publish>true</publish>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
         </profile>
     </profiles>
 
