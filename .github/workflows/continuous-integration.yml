@@ -35,16 +35,14 @@ jobs:
 
       - name: Create container image
         if: github.event_name == 'pull_request'
+        env:
+          IMAGE_ID: ghcr.io/${{ github.repository }}-preview
+          VERSION: pr${{ github.event.number }}
         run: |
-          IMAGE_ID=ghcr.io/${{ github.repository }}-preview
           # Convert to lowercase
           IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
-          VERSION="pr${{ github.event.number }}"
-          
-          echo IMAGE_ID=$IMAGE_ID
-          echo VERSION=$VERSION
 
-          mvn spring-boot:build-image \
+          mvn spring-boot:build-image-no-fork \
             -Dmaven.test.skip=true \
             -Dspring-boot.build-image.imageName=$IMAGE_ID:$VERSION \
             -Dspring-boot.build-image.publish=${{ github.event.pull_request.head.repo.fork && 'false' || 'true' }}
