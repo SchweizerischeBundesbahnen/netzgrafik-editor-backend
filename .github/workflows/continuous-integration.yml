@@ -42,7 +42,10 @@ jobs:
           # Convert to lowercase
           IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
 
-          mvn spring-boot:build-image-no-fork \
+          mvn spring-boot:build-image \
             -Dmaven.test.skip=true \
-            -Dspring-boot.build-image.imageName=$IMAGE_ID:$VERSION \
-            -Dspring-boot.build-image.publish=${{ github.event.pull_request.head.repo.fork && 'false' || 'true' }}
+            -Dspring-boot.build-image.imageName=$IMAGE_ID:$VERSION
+          
+          if [[ -n "${{ github.event.pull_request.head.repo.fork && '' || 'true' }}" ]]; then
+            docker push $IMAGE_ID:$VERSION
+          fi
