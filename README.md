@@ -22,8 +22,8 @@ This repository contains the source for the backend API for the [Netzgrafik-Edit
 
 #### Prerequisites
 
-- Java JDK
-- Maven
+- Java JDK 21
+- Maven >= 3.9.7
 - Docker and `docker-compose`
 
 
@@ -49,17 +49,18 @@ This repository contains the source for the backend API for the [Netzgrafik-Edit
    export AUTH_SERVICE_NAME=fc44839c-e95f-4854-a52d-449867a9aa62
    ```
 
-1. Run database migrations
-   ```shell
-   # run migrations
-   mvn flyway:migrate
-   ```
-   - The database schema is managed using [Flyway](https://flywaydb.org/). Migrations are placed
-under `src/main/resources/db/migration` and can be executed using maven.
-
 1. Start the app using maven
    ```shell
+   # run application with Flyway migration
    mvn spring-boot:run
+   ```
+   The database schema is managed using [Flyway](https://flywaydb.org/). Migrations are placed
+      under `src/main/resources/db/migration` and can be executed using maven. 
+   Automatic migrations can be disabled using `-Dspring.flyway.enabled=false` (see e.g. https://www.baeldung.com/database-migrations-with-flyway) 
+
+   Migrations can also be run separately:
+   ```shell
+   mvn flyway:migrate
    ```
 
 ## License
