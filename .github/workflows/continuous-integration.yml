@@ -49,6 +49,10 @@ jobs:
             -Dmaven.test.skip=true \
             -Dspring-boot.build-image.imageName=$IMAGE_ID:$VERSION
           
-          if [[ -n "${{ github.event.pull_request.head.repo.fork && '' || 'true' }}" ]]; then
-            docker push $IMAGE_ID:$VERSION
-          fi
+      - name: Upload container image
+        if: github.event_name == 'pull_request' && !github.event.pull_request.head.repo.fork
+        env:
+          IMAGE_ID: ghcr.io/${{ github.repository }}-preview
+          VERSION: pr${{ github.event.number }}
+        run: |
+          docker push $IMAGE_ID:$VERSION
