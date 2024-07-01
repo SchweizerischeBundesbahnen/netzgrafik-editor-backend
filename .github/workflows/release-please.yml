@@ -17,14 +17,14 @@ jobs:
       releases_created: ${{ steps.release.outputs.releases_created }}
       version: ${{ steps.release.outputs.version }}
     steps:
-      - uses: google-github-actions/release-please-action@v4
+      - uses: googleapis/release-please-action@v4
         id: release
         with:
           release-type: maven
 
   release:
     needs: release-please
-    if: needs.release-please.outputs.releases_created
+    if: ${{ needs.release-please.outputs.releases_created }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -38,7 +38,9 @@ jobs:
       - name: Create container image
         env:
           IMAGE_ID: ghcr.io/${{ github.repository }}
-          VERSION: ${{ needs.release-please.outputs.version }}
+          VERSION: ${{ needs.release-please.outputs.major }}.${{ needs.release-please.outputs.minor }}.${{ needs.release-please.outputs.patch }}
+          MAJOR: ${{ needs.release-please.outputs.major }}
+          MINOR: ${{ needs.release-please.outputs.minor }}
         run: |
           # Convert to lowercase
           IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
@@ -48,6 +50,8 @@ jobs:
             -Dmaven.test.skip=true \
             -Dspring-boot.build-image.imageName=$IMAGE_ID:$VERSION
 
-          docker push $IMAGE_ID:$VERSION
+          docker tag $IMAGE_ID:$VERSION $IMAGE_ID:$MAJOR.$MINOR
           docker tag $IMAGE_ID:$VERSION $IMAGE_ID:latest
+          docker push $IMAGE_ID:$VERSION
+          docker push $IMAGE_ID:$MAJOR.$MINOR
           docker push $IMAGE_ID:latest
