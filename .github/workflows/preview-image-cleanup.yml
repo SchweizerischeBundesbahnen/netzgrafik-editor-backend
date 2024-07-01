@@ -34,11 +34,7 @@ jobs:
               package_name: `${process.env.PACKAGE_NAME}`,
               username: owner
             };
-            try {
-              const { data: versions } = await github.rest.packages.getAllPackageVersionsForPackageOwnedByUser(params);
-            } catch(e) {
-              throw new Error('Error while looking for package `${process.env.PACKAGE_NAME}`, please check the log');
-            }
+            const { data: versions } = await github.rest.packages.getAllPackageVersionsForPackageOwnedByUser(params);
             let packageDeletionFailed = false;
             for (const version of versions.filter(isExpiredPrTag)) {
               try {

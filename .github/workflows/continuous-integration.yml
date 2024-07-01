@@ -2,10 +2,10 @@ name: Continuous Integration
 on:
   push:
     branches:
-      - "**"
-      - "main"
+      - main
   pull_request:
-    branches: [ "main" ]
+    branches:
+      - main
 
 permissions:
   packages: write
@@ -55,4 +55,7 @@ jobs:
           IMAGE_ID: ghcr.io/${{ github.repository }}-preview
           VERSION: pr${{ github.event.number }}
         run: |
+          # Convert to lowercase
+          IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
+
           docker push $IMAGE_ID:$VERSION
