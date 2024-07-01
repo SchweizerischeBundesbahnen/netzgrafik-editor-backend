@@ -42,6 +42,7 @@ jobs:
         run: |
           # Convert to lowercase
           IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
+          echo "Building ${IMAGE_ID}:${VERSION}"
 
           mvn spring-boot:build-image \
             -Dmaven.test.skip=true \
