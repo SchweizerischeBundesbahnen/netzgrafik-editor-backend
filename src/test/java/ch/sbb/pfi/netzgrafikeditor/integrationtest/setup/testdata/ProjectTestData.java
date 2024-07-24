@@ -8,9 +8,9 @@ import java.time.LocalDateTime;
 public class ProjectTestData {
     public static final LocalDateTime DATE_A = LocalDateTime.of(2021, 9, 1, 17, 25, 38);
 
-    public static final String USER_A = "u123456";
-    public static final String USER_B = "u654321";
-    public static final String USER_C = "u999999";
+    public static final String USER_A = "u123456@sbb.ch";
+    public static final String USER_B = "u654321@sbb.ch";
+    public static final String USER_C = "u999999@sbb.ch";
 
     public static final ProjectsRecord PROJECT_A =
             new ProjectsRecord()
