@@ -1,24 +1,32 @@
 package ch.sbb.pfi.netzgrafikeditor.api.project;
 
 import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+
+import java.util.regex.Matcher;
 
 class ProjectControllerTest {
 
+    private boolean isUserIdAsEmailPatternValid(String input) {
+        Matcher matcher = ProjectController.USER_ID_AS_EMAIL_PATTERN.matcher(input);
+        return matcher,"should be valid";
+    }
+
     @Test
     void assertEMailPatternTest() {
-        assertTrue(ProjectController.USER_ID_AS_EMAIL_PATTERN.matcher("adrian@example.com").matches());
-        assertTrue(ProjectController.USER_ID_AS_EMAIL_PATTERN.matcher("name.vorname.vorname2@mail.domain.ch").matches());
-        assertTrue(ProjectController.USER_ID_AS_EMAIL_PATTERN.matcher("fun@data.cloud").matches());
-        assertTrue(ProjectController.USER_ID_AS_EMAIL_PATTERN.matcher("adrian@ai.org").matches());
-        assertTrue(ProjectController.USER_ID_AS_EMAIL_PATTERN.matcher("1978@x.org").matches());
-        assertTrue(ProjectController.USER_ID_AS_EMAIL_PATTERN.matcher("x@1978.org").matches());
-        assertTrue(ProjectController.USER_ID_AS_EMAIL_PATTERN.matcher("1978@1978.org").matches());
-        assertTrue(ProjectController.USER_ID_AS_EMAIL_PATTERN.matcher("1978@1978.org").matches());
-        assertTrue(ProjectController.USER_ID_AS_EMAIL_PATTERN.matcher("19_78@19_78.org").matches());
+        assertTrue(isUserIdAsEmailPatternValid("adrian@example.com"),"adrian@example.com should be valid");
+        assertTrue(isUserIdAsEmailPatternValid("name.vorname.vorname2@mail.domain.ch"),"name.vorname.vorname2@mail.domain.ch should be valid");
+        assertTrue(isUserIdAsEmailPatternValid("fun@data.cloud"),"fun@data.cloud should be valid");
+        assertTrue(isUserIdAsEmailPatternValid("adrian@ai.org"),"adrian@ai.org should be valid");
+        assertTrue(isUserIdAsEmailPatternValid("1234@x.org"),"1234@x.org should be valid");
+        assertTrue(isUserIdAsEmailPatternValid("x@1234.org"),"x@1234.org should be valid");
+        assertTrue(isUserIdAsEmailPatternValid("1234@1234.org"),"1234@1234.org should be valid");
+        assertTrue(isUserIdAsEmailPatternValid("123a4@1234.org"),"123a4@1234.org should be valid");
 
-        assertFalse(ProjectController.USER_ID_AS_EMAIL_PATTERN.matcher("19....78@19_78.org").matches());
-        assertFalse(ProjectController.USER_ID_AS_EMAIL_PATTERN.matcher("u123456").matches());
-        assertFalse(ProjectController.USER_ID_AS_EMAIL_PATTERN.matcher("name.vorname.vorname2#mail.domain.ch").matches());
-        assertFalse(ProjectController.USER_ID_AS_EMAIL_PATTERN.matcher("").matches());
+        assertFalse(isUserIdAsEmailPatternValid("19....23@a.org"),"19....23@1a.org should be invalid");
+        assertFalse(isUserIdAsEmailPatternValid("u123456"),"u123456 should be invalid");
+        assertFalse(isUserIdAsEmailPatternValid("name.vorname.vorname2#mail.domain.ch"),"name.vorname.vorname2#mail.domain.ch should be invalid");
+        assertFalse(isUserIdAsEmailPatternValid(""),"'' should be invalid");
     }
 }
