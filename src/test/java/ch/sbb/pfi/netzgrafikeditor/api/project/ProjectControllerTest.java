@@ -18,6 +18,7 @@ class ProjectControllerTest {
         assertTrue(isUserIdAsEmailPatternValid("franz@nix.com"),"name.vorname.vorname2@mail.domain.ch should be valid");
         assertTrue(isUserIdAsEmailPatternValid("Franz@nix.com"),"fun@data.cloud should be valid");
         assertTrue(isUserIdAsEmailPatternValid("adrian@example.com"),"adrian@example.com should be valid");
+        assertTrue(isUserIdAsEmailPatternValid("muster.hans@example.test.zurich"),"muster.hans@example.test.zurich should be valid");
         assertTrue(isUserIdAsEmailPatternValid("name.vorname.vorname2@mail.domain.ch"),"name.vorname.vorname2@mail.domain.ch should be valid");
         assertTrue(isUserIdAsEmailPatternValid("fun@data.cloud"),"fun@data.cloud should be valid");
         assertTrue(isUserIdAsEmailPatternValid("adrian@ai.org"),"adrian@ai.org should be valid");
@@ -31,5 +32,12 @@ class ProjectControllerTest {
         assertFalse(isUserIdAsEmailPatternValid("u123456"),"u123456 should be invalid");
         assertFalse(isUserIdAsEmailPatternValid("name.vorname.vorname2#mail.domain.ch"),"name.vorname.vorname2#mail.domain.ch should be invalid");
         assertFalse(isUserIdAsEmailPatternValid(""),"'' should be invalid");
+        assertFalse(isUserIdAsEmailPatternValid("Adrian@ai.org"),"adrian@ai.org should be valid");
+        assertFalse(isUserIdAsEmailPatternValid("aDrian@ai.org"),"adrian@ai.org should be valid");
+        assertFalse(isUserIdAsEmailPatternValid("ADRIAN@AI.ORG"),"adrian@ai.org should be valid");
+        assertFalse(isUserIdAsEmailPatternValid("adrian@AI.ORG"),"adrian@ai.org should be valid");
+        assertFalse(isUserIdAsEmailPatternValid("adrian@ai.ORG"),"adrian@ai.org should be valid");
+        assertFalse(isUserIdAsEmailPatternValid("adrian@AI.org"),"adrian@ai.org should be valid");
+        assertFalse(isUserIdAsEmailPatternValid("adrian@ai.orG"),"adrian@ai.org should be valid");
     }
 }
