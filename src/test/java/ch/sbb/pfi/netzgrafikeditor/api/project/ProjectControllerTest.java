@@ -8,18 +8,18 @@ class ProjectControllerTest {
 
     @Test
     void assertEMailPattern() {
-        assertTrue(ProjectController.USER_ID_AS_EMAIL_PATTERN.matcher("adrian@example.com").matches());
-        assertFalse(ProjectController.USER_ID_AS_EMAIL_PATTERN.matcher("u123456").matches());
-        assertTrue(ProjectController.USER_ID_AS_EMAIL_PATTERN.matcher("name.vorname.vorname2@mail.domain.ch").matches());
-        assertFalse(ProjectController.USER_ID_AS_EMAIL_PATTERN.matcher("name.vorname.vorname2#mail.domain.ch").matches());
-        assertFalse(ProjectController.USER_ID_AS_EMAIL_PATTERN.matcher("").matches());
-        assertTrue(ProjectController.USER_ID_AS_EMAIL_PATTERN.matcher("fun@data.cloud").matches());
-        assertTrue(ProjectController.USER_ID_AS_EMAIL_PATTERN.matcher("adrian@ai.org").matches());
-        assertTrue(ProjectController.USER_ID_AS_EMAIL_PATTERN.matcher("1978@x.org").matches());
-        assertTrue(ProjectController.USER_ID_AS_EMAIL_PATTERN.matcher("x@1978.org").matches());
-        assertTrue(ProjectController.USER_ID_AS_EMAIL_PATTERN.matcher("1978@1978.org").matches());
-        assertTrue(ProjectController.USER_ID_AS_EMAIL_PATTERN.matcher("1978@1978.org").matches());
-        assertTrue(ProjectController.USER_ID_AS_EMAIL_PATTERN.matcher("19_78@19_78.org").matches());
-        assertFalse(ProjectController.USER_ID_AS_EMAIL_PATTERN.matcher("19....78@19_78.org").matches());
+        assertTrue("adrian@example.com".matches(ProjectController.USER_ID_AS_EMAIL_PATTERN));
+        assertFalse("u123456".matches(ProjectController.USER_ID_AS_EMAIL_PATTERN));
+        assertTrue("name.vorname.vorname2@mail.domain.ch".matches(ProjectController.USER_ID_AS_EMAIL_PATTERN));
+        assertFalse("name.vorname.vorname2#mail.domain.ch".matches(ProjectController.USER_ID_AS_EMAIL_PATTERN));
+        assertFalse("".matches(ProjectController.USER_ID_AS_EMAIL_PATTERN));
+        assertTrue("fun@data.cloud".matches(ProjectController.USER_ID_AS_EMAIL_PATTERN));
+        assertTrue("adrian@ai.org".matches(ProjectController.USER_ID_AS_EMAIL_PATTERN));
+        assertTrue("1978@x.org".matches(ProjectController.USER_ID_AS_EMAIL_PATTERN));
+        assertTrue("x@1978.org".matches(ProjectController.USER_ID_AS_EMAIL_PATTERN));
+        assertTrue("1978@1978.org".matches(ProjectController.USER_ID_AS_EMAIL_PATTERN));
+        assertTrue("1978@1978.org".matches(ProjectController.USER_ID_AS_EMAIL_PATTERN));
+        assertTrue("19_78@19_78.org".matches(ProjectController.USER_ID_AS_EMAIL_PATTERN));
+        assertFalse("19....78@19_78.org".matches(ProjectController.USER_ID_AS_EMAIL_PATTERN));
     }
 }
