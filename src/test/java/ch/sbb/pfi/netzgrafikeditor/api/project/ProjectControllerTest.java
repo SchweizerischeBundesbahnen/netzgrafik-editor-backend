@@ -5,17 +5,7 @@ import org.junit.jupiter.api.Test;
 class ProjectControllerTest {
 
     @Test
-    void assertEMailPatternTest1() {
-        assertTrue(ProjectController.USER_ID_AS_EMAIL_PATTERN.matcher("adrian@example.com").matches());
-    }
-
-    @Test
-    void assertEMailPatternTest1() {
-        assertFalse(ProjectController.USER_ID_AS_EMAIL_PATTERN.matcher("u123456").matches());
-    }
-
-    @Test
-    void assertEMailPatternTest2() {
+    void assertEMailPatternTest() {
         assertTrue(ProjectController.USER_ID_AS_EMAIL_PATTERN.matcher("adrian@example.com").matches());
         assertFalse(ProjectController.USER_ID_AS_EMAIL_PATTERN.matcher("u123456").matches());
         assertTrue(ProjectController.USER_ID_AS_EMAIL_PATTERN.matcher("name.vorname.vorname2@mail.domain.ch").matches());
