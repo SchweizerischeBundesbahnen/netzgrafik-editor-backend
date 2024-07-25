@@ -38,7 +38,7 @@ public class AuthenticationService {
     private final DSLContext context;
 
     public String getCurrentUserEmail() {
-        return this.tryGetClaim(EMAIL_CLAIM)
+        return this.tryGetClaim(PREFERRED_USERNAME_CLAIM)
                 .orElseThrow(() -> new BadCredentialsException("E-Mail missing in token"));
     }
 
