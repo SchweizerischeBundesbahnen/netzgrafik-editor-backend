@@ -50,7 +50,7 @@ public class VariantService {
         this.authenticationService.getAuthorizationInfo(projectId).assertWritable();
 
         val now = this.nowProvider.now();
-        val userId = this.authenticationService.getCurrentUserId();
+        val userId = this.authenticationService.getCurrentUserIdFromEmail();
 
         val variantRecord =
                 this.context
@@ -131,7 +131,7 @@ public class VariantService {
         this.authenticationService.getAuthorizationInfo(projectId).assertWritable();
 
         val now = this.nowProvider.now();
-        val userId = this.authenticationService.getCurrentUserId();
+        val userId = this.authenticationService.getCurrentUserIdFromEmail();
 
         val variantRecord =
                 this.context
@@ -206,7 +206,7 @@ public class VariantService {
     public void dropSnapshots(VariantId variantId) throws NotFoundException {
         assertVariantExists(variantId);
 
-        val userId = this.authenticationService.getCurrentUserId();
+        val userId = this.authenticationService.getCurrentUserIdFromEmail();
 
         if (this.hasReleases(variantId)) {
             this.deleteAllSnapshots(variantId, userId);
@@ -236,7 +236,7 @@ public class VariantService {
         assertVariantExists(variantId);
         assertHasReleases(variantId);
 
-        val userId = this.authenticationService.getCurrentUserId();
+        val userId = this.authenticationService.getCurrentUserIdFromEmail();
 
         val highestReleasedVersion =
                 this.tryFetchHighestReleaseVersion(variantId)

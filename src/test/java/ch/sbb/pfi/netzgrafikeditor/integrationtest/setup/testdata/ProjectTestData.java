@@ -10,7 +10,7 @@ public class ProjectTestData {
 
     public static final String USER_A = "u123456@sbb.ch";
     public static final String USER_B = "u654321@sbb.ch";
-    public static final String USER_C = "u999999@sbb.ch";
+    public static final String USER_C = "admin@example.com";
 
     public static final ProjectsRecord PROJECT_A =
             new ProjectsRecord()

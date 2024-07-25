@@ -32,19 +32,19 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
-    private static final String USER_ID_CLAIM = "email";
-    private static final String EMAIL_CLAIM = "preferred_username";
+    private static final String USER_ID_FROM_EMAIL_CLAIM = "email";
+    private static final String PREFERRED_USERNAME_CLAIM = "preferred_username";
 
     private final DSLContext context;
 
     public String getCurrentUserEmail() {
-        return this.tryGetClaim(EMAIL_CLAIM)
+        return this.tryGetClaim(PREFERRED_USERNAME_CLAIM)
                 .orElseThrow(() -> new BadCredentialsException("E-Mail missing in token"));
     }
 
-    public UserId getCurrentUserId() {
+    public UserId getCurrentUserIdFromEmail() {
         val idString =
-                this.tryGetClaim(USER_ID_CLAIM)
+                this.tryGetClaim(USER_ID_FROM_EMAIL_CLAIM)
                         .orElseThrow(() -> new BadCredentialsException("User ID missing in token"));
 
         return UserId.of(idString);
@@ -72,7 +72,7 @@ public class AuthenticationService {
                 .leftJoin(PROJECTS_USERS)
                 .on(
                         PROJECTS_USERS.PROJECT_ID.eq(PROJECTS.ID),
-                        PROJECTS_USERS.USER_ID.eq(this.getCurrentUserId().getValue()))
+                        PROJECTS_USERS.USER_ID.eq(this.getCurrentUserIdFromEmail().getValue()))
                 .where(PROJECTS.ID.eq(projectId.getValue()))
                 .fetchOptional()
                 .map(
@@ -94,7 +94,7 @@ public class AuthenticationService {
                 .leftJoin(PROJECTS_USERS)
                 .on(
                         PROJECTS_USERS.PROJECT_ID.eq(PROJECTS.ID),
-                        PROJECTS_USERS.USER_ID.eq(this.getCurrentUserId().getValue()))
+                        PROJECTS_USERS.USER_ID.eq(this.getCurrentUserIdFromEmail().getValue()))
                 .where(VARIANTS.ID.eq(variantId.getValue()))
                 .fetchOptional()
                 .map(
@@ -122,7 +122,7 @@ public class AuthenticationService {
                 .leftJoin(PROJECTS_USERS)
                 .on(
                         PROJECTS_USERS.PROJECT_ID.eq(PROJECTS.ID),
-                        PROJECTS_USERS.USER_ID.eq(this.getCurrentUserId().getValue()))
+                        PROJECTS_USERS.USER_ID.eq(this.getCurrentUserIdFromEmail().getValue()))
                 .where(VERSIONS.ID.eq(versionId.getValue()))
                 .fetchOptional()
                 .map(
