@@ -59,7 +59,7 @@ public class ProjectService {
                         .setDescription(project.getDescription())
                         .setIsArchived(false)
                         .setCreatedAt(nowProvider.now())
-                        .setCreatedBy(this.authenticationService.getCurrentUserId().getValue());
+                        .setCreatedBy(this.authenticationService.getCurrentUserIdFromEmail().getValue());
 
         record.store();
 
@@ -67,7 +67,7 @@ public class ProjectService {
 
         var writeUsersIncludingCurrentUser = new ArrayList<>(project.getWriteUsers());
         writeUsersIncludingCurrentUser.add(
-                this.authenticationService.getCurrentUserId().getValue());
+                this.authenticationService.getCurrentUserIdFromEmail().getValue());
 
         this.updateProjectUsers(projectId, writeUsersIncludingCurrentUser, project.getReadUsers());
 
@@ -187,7 +187,7 @@ public class ProjectService {
                                         PROJECTS_USERS.PROJECT_ID.eq(PROJECTS.ID),
                                         PROJECTS_USERS.USER_ID.eq(
                                                 this.authenticationService
-                                                        .getCurrentUserId()
+                                                        .getCurrentUserIdFromEmail()
                                                         .getValue()));
 
         return this.context
@@ -227,7 +227,7 @@ public class ProjectService {
 
         for (val snapshotVersion :
                 this.getLatestSnapshotVersions(
-                        projectId, authenticationService.getCurrentUserId())) {
+                        projectId, authenticationService.getCurrentUserIdFromEmail())) {
             variantsMap
                     .get(snapshotVersion.getVariantId())
                     .latestSnapshotVersion(Optional.of(snapshotVersion));

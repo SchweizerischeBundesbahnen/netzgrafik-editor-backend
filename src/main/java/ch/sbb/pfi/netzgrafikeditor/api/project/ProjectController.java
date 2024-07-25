@@ -35,7 +35,7 @@ import java.util.stream.Collectors;
 public class ProjectController {
     private final ProjectService projectService;
 
-    private static Pattern USER_ID_PATTERN = Pattern.compile("^([a-z0-9_\\.-]+)@([\\da-z\\.-]+)\\.([a-z\\.]{2,6})$");
+    public static Pattern USER_ID_AS_EMAIL_PATTERN = Pattern.compile("^([a-z0-9_\\.-]+)@([\\da-z\\.-]+)\\.([a-z\\.]{2,6})$");
 
     @PostMapping("/v1/projects")
     public ResponseEntity<Long> createProject(@RequestBody ProjectCreateUpdateDto projectDto)
@@ -90,7 +90,7 @@ public class ProjectController {
     private void assertValidUserIds(Collection<String> userIds) throws ValidationErrorException {
         val invalidUserIds =
                 userIds.stream()
-                        .filter(id -> !USER_ID_PATTERN.matcher(id).matches())
+                        .filter(id -> !USER_ID_AS_EMAIL_PATTERN.matcher(id).matches())
                         .collect(Collectors.toList());
 
         if (!invalidUserIds.isEmpty()) {
