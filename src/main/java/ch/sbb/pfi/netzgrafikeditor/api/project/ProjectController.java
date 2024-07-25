@@ -35,7 +35,7 @@ import java.util.stream.Collectors;
 public class ProjectController {
     private final ProjectService projectService;
 
-    // email adresse validator: regex to match emails using the expression
+    // email adress validator: regex to match emails using the expression
     protected static Pattern USER_ID_AS_EMAIL_PATTERN = Pattern.compile("^([a-z0-9_\\.-]+)@([a-z0-9\\.-]+).([a-z\\.]{2,6})$");
 
     @PostMapping("/v1/projects")
