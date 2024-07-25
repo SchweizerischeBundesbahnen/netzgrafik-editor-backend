@@ -33,7 +33,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class AuthenticationService {
     private static final String USER_ID_FROM_EMAIL_CLAIM = "email";
-    private static final String EMAIL_CLAIM = "preferred_username";
+    private static final String PREFERRED_USERNAME_CLAIM = "preferred_username";
 
     private final DSLContext context;
 
