@@ -25,6 +25,7 @@ class ProjectControllerTest {
         assertTrue(isUserIdAsEmailPatternValid("x@1234.org"),"x@1234.org should be valid");
         assertTrue(isUserIdAsEmailPatternValid("1234@1234.org"),"1234@1234.org should be valid");
         assertTrue(isUserIdAsEmailPatternValid("123a4@1234.org"),"123a4@1234.org should be valid");
+        assertTrue(isUserIdAsEmailPatternValid("123a4@1234abc123zsd.a123sb.org"),"123a4@1234.org should be valid");
 
         assertFalse(isUserIdAsEmailPatternValid("blabla"),"blabla should be invalid");
         assertFalse(isUserIdAsEmailPatternValid("u123456"),"u123456 should be invalid");
