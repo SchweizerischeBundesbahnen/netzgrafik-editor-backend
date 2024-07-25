@@ -8,7 +8,7 @@ class ProjectControllerTest {
 
     private boolean isUserIdAsEmailPatternValid(String input) {
         Matcher matcher = ProjectController.USER_ID_AS_EMAIL_PATTERN.matcher(input);
-        return matcher,"should be valid";
+        return matcher.matches();
     }
 
     @Test
