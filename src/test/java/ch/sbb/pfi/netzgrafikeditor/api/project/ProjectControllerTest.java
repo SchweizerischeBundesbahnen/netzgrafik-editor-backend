@@ -1,8 +1,7 @@
 package ch.sbb.pfi.netzgrafikeditor.api.project;
 
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.*;
-
+import static org.junit.Assert.*;
 import java.util.regex.Matcher;
 
 class ProjectControllerTest {
