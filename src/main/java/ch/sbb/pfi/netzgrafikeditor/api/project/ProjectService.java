@@ -179,21 +179,20 @@ public class ProjectService {
                     : selectOne()
                         .from(PROJECTS_USERS)
                         .where(
-                            PROJECTS_USERS.PROJECT_ID.eq(PROJECTS.ID),
-
-                                PROJECTS_USERS.USER_ID.eq(
-                                        this.authenticationService
-                                            .getCurrentUserIdFromEmail()
-                                            .getValue())
-
-                                    .or(
-                                        // backwards compatible
-                                        PROJECTS_USERS.USER_ID.eq(
+                            PROJECTS_USERS.PROJECT_ID.eq(PROJECTS.ID).
+                                and(
+                                    PROJECTS_USERS.USER_ID.eq(
                                             this.authenticationService
-                                                .getCurrentSubjectId()
+                                                .getCurrentUserIdFromEmail()
                                                 .getValue())
-                                    )
-
+                                        .or(
+                                            // backwards compatible
+                                            PROJECTS_USERS.USER_ID.eq(
+                                                this.authenticationService
+                                                    .getCurrentSubjectId()
+                                                    .getValue())
+                                        )
+                                )
                         )
                         .limit(1);
 
