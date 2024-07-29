@@ -84,7 +84,8 @@ public class AuthenticationService {
                 .on(
                         PROJECTS_USERS.PROJECT_ID.eq(PROJECTS.ID))
                 .where(PROJECTS.ID.eq(projectId.getValue()))
-                .fetchOne()
+                .limit(1)
+                .fetchOptional()
                 .map(
                         record -> {
                             val isArchived = record.getValue(PROJECTS.IS_ARCHIVED);
@@ -104,11 +105,8 @@ public class AuthenticationService {
                 .leftJoin(PROJECTS_USERS)
                 .on(
                         PROJECTS_USERS.PROJECT_ID.eq(PROJECTS.ID))
-                .where(VARIANTS.ID.eq(variantId.getValue()).and(
-                    PROJECTS_USERS.USER_ID.eq(this.getCurrentUserIdFromEmail().getValue()).or(
-                        PROJECTS_USERS.USER_ID.eq(this.getCurrentSubjectId().getValue())
-                    )
-                ))
+                .where(VARIANTS.ID.eq(variantId.getValue()))
+                .limit(1)
                 .fetchOptional()
                 .map(
                         record -> {
