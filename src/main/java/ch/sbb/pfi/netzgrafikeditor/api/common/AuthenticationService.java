@@ -84,7 +84,7 @@ public class AuthenticationService {
                 .on(
                         PROJECTS_USERS.PROJECT_ID.eq(PROJECTS.ID))
                 .where(PROJECTS.ID.eq(projectId.getValue()))
-                .fetchOptional()
+                .fetchOne()
                 .map(
                         record -> {
                             val isArchived = record.getValue(PROJECTS.IS_ARCHIVED);
