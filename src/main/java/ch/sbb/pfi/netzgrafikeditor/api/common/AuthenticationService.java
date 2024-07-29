@@ -105,7 +105,8 @@ public class AuthenticationService {
                 .leftJoin(PROJECTS_USERS)
                 .on(
                         PROJECTS_USERS.PROJECT_ID.eq(PROJECTS.ID),
-                        PROJECTS_USERS.USER_ID.eq(this.getCurrentUserIdFromEmail().getValue()))
+                        PROJECTS_USERS.USER_ID.eq(this.getCurrentUserIdFromEmail().getValue())).or(
+                        PROJECTS_USERS.USER_ID.eq(this.getCurrentSubjectId().getValue()))
                 .where(VARIANTS.ID.eq(variantId.getValue()))
                 .fetchOptional()
                 .map(
@@ -133,7 +134,8 @@ public class AuthenticationService {
                 .leftJoin(PROJECTS_USERS)
                 .on(
                         PROJECTS_USERS.PROJECT_ID.eq(PROJECTS.ID),
-                        PROJECTS_USERS.USER_ID.eq(this.getCurrentUserIdFromEmail().getValue()))
+                        PROJECTS_USERS.USER_ID.eq(this.getCurrentUserIdFromEmail().getValue())).or(
+                        PROJECTS_USERS.USER_ID.eq(this.getCurrentSubjectId().getValue()))
                 .where(VERSIONS.ID.eq(versionId.getValue()))
                 .fetchOptional()
                 .map(
