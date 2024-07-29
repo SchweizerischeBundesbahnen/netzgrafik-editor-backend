@@ -86,7 +86,8 @@ public class AuthenticationService {
                 .where(PROJECTS.ID.eq(projectId.getValue()).and(
                     PROJECTS_USERS.USER_ID.eq(this.getCurrentUserIdFromEmail().getValue()).or(
                         PROJECTS_USERS.USER_ID.eq(this.getCurrentSubjectId().getValue())
-                    )))
+                    )
+                ))
                 .fetchOptional()
                 .map(
                         record -> {
@@ -106,11 +107,12 @@ public class AuthenticationService {
                 .on(VARIANTS.PROJECT_ID.eq(PROJECTS.ID))
                 .leftJoin(PROJECTS_USERS)
                 .on(
-                    PROJECTS_USERS.PROJECT_ID.eq(PROJECTS.ID))
-                .where(PROJECTS.ID.eq(projectId.getValue()).and(
+                        PROJECTS_USERS.PROJECT_ID.eq(PROJECTS.ID))
+                .where(VARIANTS.ID.eq(variantId.getValue()).and(
                     PROJECTS_USERS.USER_ID.eq(this.getCurrentUserIdFromEmail().getValue()).or(
-                            PROJECTS_USERS.USER_ID.eq(this.getCurrentSubjectId().getValue())
-                        )))
+                        PROJECTS_USERS.USER_ID.eq(this.getCurrentSubjectId().getValue())
+                    )
+                ))
                 .fetchOptional()
                 .map(
                         record -> {
@@ -136,11 +138,12 @@ public class AuthenticationService {
                 .on(VERSIONS.VARIANT_ID.eq(VARIANTS.ID))
                 .leftJoin(PROJECTS_USERS)
                 .on(
-                    PROJECTS_USERS.PROJECT_ID.eq(PROJECTS.ID))
-                .where(PROJECTS.ID.eq(projectId.getValue()).and(
+                        PROJECTS_USERS.PROJECT_ID.eq(PROJECTS.ID))
+                .where(VERSIONS.ID.eq(versionId.getValue()).and(
                     PROJECTS_USERS.USER_ID.eq(this.getCurrentUserIdFromEmail().getValue()).or(
-                            PROJECTS_USERS.USER_ID.eq(this.getCurrentSubjectId().getValue())
-                        )))
+                        PROJECTS_USERS.USER_ID.eq(this.getCurrentSubjectId().getValue())
+                    )
+                ))
                 .fetchOptional()
                 .map(
                         record -> {
