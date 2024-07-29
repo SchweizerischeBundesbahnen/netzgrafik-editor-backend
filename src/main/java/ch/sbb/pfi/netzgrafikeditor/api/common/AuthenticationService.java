@@ -83,7 +83,13 @@ public class AuthenticationService {
                 .leftJoin(PROJECTS_USERS)
                 .on(
                         PROJECTS_USERS.PROJECT_ID.eq(PROJECTS.ID))
-                .where(PROJECTS.ID.eq(projectId.getValue()))
+                .where(PROJECTS.ID.eq(projectId.getValue()).and(
+                    PROJECTS_USERS.USER_ID.eq(this.getCurrentUserIdFromEmail().getValue()).or(
+                        PROJECTS_USERS.USER_ID.eq(this.getCurrentSubjectId().getValue()).or(
+                            this.isAdmin()
+                        )
+                    )
+                ))
                 .limit(1)
                 .fetchOptional()
                 .map(
@@ -105,7 +111,13 @@ public class AuthenticationService {
                 .leftJoin(PROJECTS_USERS)
                 .on(
                         PROJECTS_USERS.PROJECT_ID.eq(PROJECTS.ID))
-                .where(VARIANTS.ID.eq(variantId.getValue()))
+                .where(VARIANTS.ID.eq(variantId.getValue()).and(
+                    PROJECTS_USERS.USER_ID.eq(this.getCurrentUserIdFromEmail().getValue()).or(
+                        PROJECTS_USERS.USER_ID.eq(this.getCurrentSubjectId().getValue()).or(
+                            this.isAdmin()
+                        )
+                    )
+                ))
                 .limit(1)
                 .fetchOptional()
                 .map(
@@ -133,7 +145,13 @@ public class AuthenticationService {
                 .leftJoin(PROJECTS_USERS)
                 .on(
                         PROJECTS_USERS.PROJECT_ID.eq(PROJECTS.ID))
-                .where(VERSIONS.ID.eq(versionId.getValue()))
+                .where(VERSIONS.ID.eq(versionId.getValue()).and(
+                    PROJECTS_USERS.USER_ID.eq(this.getCurrentUserIdFromEmail().getValue()).or(
+                        PROJECTS_USERS.USER_ID.eq(this.getCurrentSubjectId().getValue()).or(
+                            this.isAdmin()
+                        )
+                    )
+                ))
                 .limit(1)
                 .fetchOptional()
                 .map(
