@@ -86,7 +86,7 @@ public class AuthenticationService {
                 .where(PROJECTS.ID.eq(projectId.getValue()).and(
                     PROJECTS_USERS.USER_ID.eq(this.getCurrentUserIdFromEmail().getValue()).or(
                         PROJECTS_USERS.USER_ID.eq(this.getCurrentSubjectId().getValue())
-                    )
+                    )))
                 ))
                 .fetchOptional()
                 .map(
@@ -111,7 +111,7 @@ public class AuthenticationService {
                 .where(PROJECTS.ID.eq(projectId.getValue()).and(
                     PROJECTS_USERS.USER_ID.eq(this.getCurrentUserIdFromEmail().getValue()).or(
                             PROJECTS_USERS.USER_ID.eq(this.getCurrentSubjectId().getValue())
-                        )
+                        )))
                 .fetchOptional()
                 .map(
                         record -> {
@@ -141,7 +141,7 @@ public class AuthenticationService {
                 .where(PROJECTS.ID.eq(projectId.getValue()).and(
                     PROJECTS_USERS.USER_ID.eq(this.getCurrentUserIdFromEmail().getValue()).or(
                             PROJECTS_USERS.USER_ID.eq(this.getCurrentSubjectId().getValue())
-                        )
+                        )))
                 .fetchOptional()
                 .map(
                         record -> {
