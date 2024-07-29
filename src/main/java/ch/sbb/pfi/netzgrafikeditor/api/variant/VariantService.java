@@ -219,7 +219,7 @@ public class VariantService {
                                     .eq(variantId.getValue())
                                     .and(
                                         VERSIONS.CREATED_BY.eq(userId.getValue()).or(
-                                            VERSION.CREATED_BY.eq(this.authenticationService.getCurrentSubjectId().getValue())
+                                            VERSIONS.CREATED_BY.eq(this.authenticationService.getCurrentSubjectId().getValue())
                                         )
                                     )
                                     .and(VERSIONS.SNAPSHOT_VERSION.isNotNull())
