@@ -278,7 +278,10 @@ public class VersionService {
                                 VERSIONS.VARIANT_ID.eq(variantId.getValue()),
                                 VERSIONS.SNAPSHOT_VERSION.isNotNull(),
                                 VERSIONS.CREATED_BY.eq(
-                                        this.authenticationService.getCurrentUserIdFromEmail().getValue()))
+                                        this.authenticationService.getCurrentUserIdFromEmail().getValue()).or(
+                                    VERSIONS.CREATED_BY.eq(
+                                        authenticationService.getCurrentSubjectId().getValue())
+                                ))
                         .orderBy(VERSIONS.RELEASE_VERSION.desc(), VERSIONS.SNAPSHOT_VERSION.desc())
                         .limit(1)
                         .fetchOptional(this::mapVersion);
