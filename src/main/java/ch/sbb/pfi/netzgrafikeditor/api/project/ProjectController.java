@@ -36,7 +36,7 @@ public class ProjectController {
     private final ProjectService projectService;
 
     // email adress validator: regex to match emails using the expression
-    protected static Pattern USER_ID_AS_EMAIL_PATTERN = Pattern.compile("^([a-z0-9_\\.-]+)@([a-z0-9\\.-]+).([a-z\\.]{2,6})$");
+    protected static Pattern USER_ID_AS_EMAIL_PATTERN = Pattern.compile("^([a-z0-9_\\.-]+)@([a-z0-9\\.-]+).([a-z\\.]{2,6})|(u|ue|e)\\d+$");
 
     @PostMapping("/v1/projects")
     public ResponseEntity<Long> createProject(@RequestBody ProjectCreateUpdateDto projectDto)
