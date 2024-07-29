@@ -20,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Value;
 import lombok.val;
 
+import org.jooq.Condition;
 import org.jooq.DSLContext;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.GrantedAuthority;
@@ -77,19 +78,20 @@ public class AuthenticationService {
     }
 
     public AuthorizationInfo getAuthorizationInfo(ProjectId projectId) throws NotFoundException {
+        Condition whereCondition = this.isAdmin() ?
+            PROJECTS.ID.eq(projectId.getValue()) :
+            PROJECTS.ID.eq(projectId.getValue()).and(
+            PROJECTS_USERS.USER_ID.eq(this.getCurrentUserIdFromEmail().getValue()).or(
+                PROJECTS_USERS.USER_ID.eq(this.getCurrentSubjectId().getValue())
+            )
+        );
         return this.context
                 .select(PROJECTS.IS_ARCHIVED, PROJECTS_USERS.IS_EDITOR)
                 .from(PROJECTS)
                 .leftJoin(PROJECTS_USERS)
                 .on(
                         PROJECTS_USERS.PROJECT_ID.eq(PROJECTS.ID))
-                .where(PROJECTS.ID.eq(projectId.getValue()).and(
-                    PROJECTS_USERS.USER_ID.eq(this.getCurrentUserIdFromEmail().getValue()).or(
-                        PROJECTS_USERS.USER_ID.eq(this.getCurrentSubjectId().getValue()).or(
-                            this.isAdmin()
-                        )
-                    )
-                ))
+                .where(whereCondition)
                 .limit(1)
                 .fetchOptional()
                 .map(
@@ -103,6 +105,13 @@ public class AuthenticationService {
     }
 
     public AuthorizationInfo getAuthorizationInfo(VariantId variantId) throws NotFoundException {
+        Condition whereCondition = this.isAdmin() ?
+            VARIANTS.ID.eq(variantId.getValue()) :
+            VARIANTS.ID.eq(variantId.getValue()).and(
+                PROJECTS_USERS.USER_ID.eq(this.getCurrentUserIdFromEmail().getValue()).or(
+                    PROJECTS_USERS.USER_ID.eq(this.getCurrentSubjectId().getValue())
+                )
+            );
         return this.context
                 .select(PROJECTS.IS_ARCHIVED, VARIANTS.IS_ARCHIVED, PROJECTS_USERS.IS_EDITOR)
                 .from(PROJECTS)
@@ -111,13 +120,7 @@ public class AuthenticationService {
                 .leftJoin(PROJECTS_USERS)
                 .on(
                         PROJECTS_USERS.PROJECT_ID.eq(PROJECTS.ID))
-                .where(VARIANTS.ID.eq(variantId.getValue()).and(
-                    PROJECTS_USERS.USER_ID.eq(this.getCurrentUserIdFromEmail().getValue()).or(
-                        PROJECTS_USERS.USER_ID.eq(this.getCurrentSubjectId().getValue()).or(
-                            this.isAdmin()
-                        )
-                    )
-                ))
+                .where(whereCondition)
                 .limit(1)
                 .fetchOptional()
                 .map(
@@ -135,6 +138,13 @@ public class AuthenticationService {
     }
 
     public AuthorizationInfo getAuthorizationInfo(VersionId versionId) throws NotFoundException {
+        Condition whereCondition = this.isAdmin() ?
+            VERSIONS.ID.eq(versionId.getValue()) :
+            VERSIONS.ID.eq(versionId.getValue()).and(
+            PROJECTS_USERS.USER_ID.eq(this.getCurrentUserIdFromEmail().getValue()).or(
+                PROJECTS_USERS.USER_ID.eq(this.getCurrentSubjectId().getValue())
+            )
+        );
         return this.context
                 .select(PROJECTS.IS_ARCHIVED, VARIANTS.IS_ARCHIVED, PROJECTS_USERS.IS_EDITOR)
                 .from(PROJECTS)
@@ -145,13 +155,7 @@ public class AuthenticationService {
                 .leftJoin(PROJECTS_USERS)
                 .on(
                         PROJECTS_USERS.PROJECT_ID.eq(PROJECTS.ID))
-                .where(VERSIONS.ID.eq(versionId.getValue()).and(
-                    PROJECTS_USERS.USER_ID.eq(this.getCurrentUserIdFromEmail().getValue()).or(
-                        PROJECTS_USERS.USER_ID.eq(this.getCurrentSubjectId().getValue()).or(
-                            this.isAdmin()
-                        )
-                    )
-                ))
+                .where(whereCondition)
                 .limit(1)
                 .fetchOptional()
                 .map(
