@@ -83,11 +83,7 @@ public class AuthenticationService {
                 .leftJoin(PROJECTS_USERS)
                 .on(
                         PROJECTS_USERS.PROJECT_ID.eq(PROJECTS.ID))
-                .where(PROJECTS.ID.eq(projectId.getValue()).and(
-                    PROJECTS_USERS.USER_ID.eq(this.getCurrentUserIdFromEmail().getValue()).or(
-                        PROJECTS_USERS.USER_ID.eq(this.getCurrentSubjectId().getValue())
-                    )
-                ))
+                .where(PROJECTS.ID.eq(projectId.getValue()))
                 .fetchOptional()
                 .map(
                         record -> {
