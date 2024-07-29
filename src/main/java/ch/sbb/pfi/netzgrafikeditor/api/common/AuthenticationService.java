@@ -88,7 +88,7 @@ public class AuthenticationService {
                         PROJECTS_USERS.USER_ID.eq(this.getCurrentSubjectId().getValue())
                     )
                 ))
-                .fetchOptional()
+                .fetchMany()
                 .map(
                         record -> {
                             val isArchived = record.getValue(PROJECTS.IS_ARCHIVED);
@@ -113,7 +113,7 @@ public class AuthenticationService {
                         PROJECTS_USERS.USER_ID.eq(this.getCurrentSubjectId().getValue())
                     )
                 ))
-                .fetchOptional()
+                .fetchMany()
                 .map(
                         record -> {
                             val isProjectArchived = record.getValue(PROJECTS.IS_ARCHIVED);
@@ -144,7 +144,7 @@ public class AuthenticationService {
                         PROJECTS_USERS.USER_ID.eq(this.getCurrentSubjectId().getValue())
                     )
                 ))
-                .fetchOptional()
+                .fetchMany()
                 .map(
                         record -> {
                             val isProjectArchived = record.getValue(PROJECTS.IS_ARCHIVED);
