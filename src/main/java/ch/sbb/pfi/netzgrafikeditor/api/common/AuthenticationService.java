@@ -32,7 +32,10 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
+
+    // See: https://openid.net/specs/openid-connect-core-1_0.html#Claims
     private static final String USER_ID_FROM_EMAIL_CLAIM = "email";
+    private static final String Subject_Identifier_CLAIM = "sub";
     private static final String PREFERRED_USERNAME_CLAIM = "preferred_username";
 
     private final DSLContext context;
@@ -46,6 +49,14 @@ public class AuthenticationService {
         val idString =
                 this.tryGetClaim(USER_ID_FROM_EMAIL_CLAIM)
                         .orElseThrow(() -> new BadCredentialsException("User ID missing in token"));
+
+        return UserId.of(idString);
+    }
+
+    public UserId getCurrentSubjectId() {
+        val idString =
+            this.tryGetClaim(Subject_Identifier_CLAIM)
+                .orElseThrow(() -> new BadCredentialsException("Sub identifier missing in token"));
 
         return UserId.of(idString);
     }

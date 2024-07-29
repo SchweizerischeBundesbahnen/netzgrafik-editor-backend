@@ -174,7 +174,6 @@ public class ProjectService {
                 .set(PROJECTS.IS_ARCHIVED, false)
                 .where(PROJECTS.ID.eq(projectId.getValue()))
                 .execute();
-    }
 
     @Transactional(readOnly = true)
     public Collection<ProjectSummaryDto> getAll() {
@@ -185,10 +184,22 @@ public class ProjectService {
                                 .from(PROJECTS_USERS)
                                 .where(
                                         PROJECTS_USERS.PROJECT_ID.eq(PROJECTS.ID),
-                                        PROJECTS_USERS.USER_ID.eq(
-                                                this.authenticationService
-                                                        .getCurrentUserIdFromEmail()
-                                                        .getValue()));
+                                        (
+                                            PROJECTS_USERS.USER_ID.eq(
+                                                    this.authenticationService
+                                                            .getCurrentUserIdFromEmail()
+                                                            .getValue())
+
+                                        .or(
+                                            // backwards compatible
+                                            PROJECTS_USERS.USER_ID.eq(
+                                                    this.authenticationService
+                                                        .getCurrentSubjectId()
+                                                        .getValue())
+                                            )
+                                        )
+                                    )
+                                .limit(1);
 
         return this.context
                 .selectFrom(PROJECTS)
