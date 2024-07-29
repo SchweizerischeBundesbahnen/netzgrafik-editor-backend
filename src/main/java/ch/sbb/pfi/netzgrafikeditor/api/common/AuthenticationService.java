@@ -82,9 +82,13 @@ public class AuthenticationService {
                 .from(PROJECTS)
                 .leftJoin(PROJECTS_USERS)
                 .on(
-                        PROJECTS_USERS.PROJECT_ID.eq(PROJECTS.ID).and(
-                        PROJECTS_USERS.USER_ID.eq(this.getCurrentUserIdFromEmail().getValue())).or(
-                        PROJECTS_USERS.USER_ID.eq(this.getCurrentSubjectId().getValue())))
+                    PROJECTS_USERS.PROJECT_ID.eq(PROJECTS.ID),
+                    PROJECTS_USERS.USER_ID.eq(this.getCurrentUserIdFromEmail().getValue()))
+                .union()
+                .leftJoin(PROJECTS_USERS)
+                .on(
+                    PROJECTS_USERS.PROJECT_ID.eq(PROJECTS.ID),
+                    PROJECTS_USERS.USER_ID.eq(this.getCurrentUserIdFromEmail().getValue()))
                 .where(PROJECTS.ID.eq(projectId.getValue()))
                 .fetchOptional()
                 .map(
@@ -105,9 +109,13 @@ public class AuthenticationService {
                 .on(VARIANTS.PROJECT_ID.eq(PROJECTS.ID))
                 .leftJoin(PROJECTS_USERS)
                 .on(
-                        PROJECTS_USERS.PROJECT_ID.eq(PROJECTS.ID).and(
-                        PROJECTS_USERS.USER_ID.eq(this.getCurrentUserIdFromEmail().getValue())).or(
-                        PROJECTS_USERS.USER_ID.eq(this.getCurrentSubjectId().getValue())))
+                    PROJECTS_USERS.PROJECT_ID.eq(PROJECTS.ID),
+                    PROJECTS_USERS.USER_ID.eq(this.getCurrentUserIdFromEmail().getValue()))
+                .union()
+                .leftJoin(PROJECTS_USERS)
+                .on(
+                    PROJECTS_USERS.PROJECT_ID.eq(PROJECTS.ID),
+                    PROJECTS_USERS.USER_ID.eq(this.getCurrentUserIdFromEmail().getValue()))
                 .where(VARIANTS.ID.eq(variantId.getValue()))
                 .fetchOptional()
                 .map(
@@ -134,9 +142,14 @@ public class AuthenticationService {
                 .on(VERSIONS.VARIANT_ID.eq(VARIANTS.ID))
                 .leftJoin(PROJECTS_USERS)
                 .on(
-                        PROJECTS_USERS.PROJECT_ID.eq(PROJECTS.ID).and(
-                        PROJECTS_USERS.USER_ID.eq(this.getCurrentUserIdFromEmail().getValue())).or(
-                        PROJECTS_USERS.USER_ID.eq(this.getCurrentSubjectId().getValue())))
+                        PROJECTS_USERS.PROJECT_ID.eq(PROJECTS.ID),
+                        PROJECTS_USERS.USER_ID.eq(this.getCurrentUserIdFromEmail().getValue()))
+                .union()
+                    .leftJoin(PROJECTS_USERS)
+                    .on(
+                        PROJECTS_USERS.PROJECT_ID.eq(PROJECTS.ID),
+                            PROJECTS_USERS.USER_ID.eq(this.getCurrentUserIdFromEmail().getValue()))
+
                 .where(VERSIONS.ID.eq(versionId.getValue()))
                 .fetchOptional()
                 .map(
