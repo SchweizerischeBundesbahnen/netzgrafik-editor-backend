@@ -87,7 +87,6 @@ public class AuthenticationService {
                     PROJECTS_USERS.USER_ID.eq(this.getCurrentUserIdFromEmail().getValue()).or(
                         PROJECTS_USERS.USER_ID.eq(this.getCurrentSubjectId().getValue())
                     )))
-                ))
                 .fetchOptional()
                 .map(
                         record -> {
