@@ -96,12 +96,12 @@ public class ProjectController {
         ListIterator<String> iteratorWriteUsers = projectDto.getWriteUsers().listIterator();
         while (iteratorWriteUsers.hasNext())
         {
-            iteratorWriteUsers.set(iterator.next().toLowerCase());
+            iteratorWriteUsers.set(iteratorWriteUsers.next().toLowerCase());
         }
         ListIterator<String> iteratorReadUsers = projectDto.getReadUsers().listIterator();
         while (iteratorReadUsers.hasNext())
         {
-            iteratorReadUsers.set(iterator.next().toLowerCase());
+            iteratorReadUsers.set(iteratorReadUsers.next().toLowerCase());
         }
     }
 
