@@ -93,7 +93,6 @@ public class ProjectController {
     }
 
     private void convertAllUsersToLowerCase(ProjectCreateUpdateDto projectDto) {
-        /*
         ListIterator<String> iteratorWriteUsers = projectDto.getWriteUsers().listIterator();
         while (iteratorWriteUsers.hasNext())
         {
@@ -104,7 +103,6 @@ public class ProjectController {
         {
             iteratorReadUsers.set(iteratorReadUsers.next().toLowerCase());
         }
-         */
     }
 
     private void assertValidUserIds(Collection<String> userIds) throws ValidationErrorException {
