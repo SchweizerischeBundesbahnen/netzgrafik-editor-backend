@@ -28,6 +28,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.util.Collection;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.ListIterator;
 
 @RestController
 @RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE)
@@ -36,11 +37,13 @@ public class ProjectController {
     private final ProjectService projectService;
 
     // email adress validator: regex to match emails using the expression
-    protected static Pattern USER_ID_AS_EMAIL_PATTERN = Pattern.compile("^([a-z0-9_\\.-]+)@([a-z0-9\\.-]+).([a-z\\.]{2,6})$");
+    protected static Pattern USER_ID_AS_EMAIL_PATTERN =
+        Pattern.compile("^([a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*)|(u|ue|e)\\d+$");
 
     @PostMapping("/v1/projects")
     public ResponseEntity<Long> createProject(@RequestBody ProjectCreateUpdateDto projectDto)
             throws ValidationErrorException {
+        this.convertAllUsersToLowerCase(projectDto);
         this.assertValidUserIds(projectDto);
 
         val id = this.projectService.create(projectDto);
@@ -77,6 +80,7 @@ public class ProjectController {
     public ResponseEntity<Void> updateProject(
             @PathVariable ProjectId id, @Valid @RequestBody ProjectCreateUpdateDto projectDto)
             throws NotFoundException, ValidationErrorException, ForbiddenOperationException {
+        this.convertAllUsersToLowerCase(projectDto);
         this.assertValidUserIds(projectDto);
         this.projectService.update(id, projectDto);
         return ResponseEntity.noContent().build();
@@ -86,6 +90,19 @@ public class ProjectController {
             throws ValidationErrorException {
         this.assertValidUserIds(projectDto.getReadUsers());
         this.assertValidUserIds(projectDto.getWriteUsers());
+    }
+
+    private void convertAllUsersToLowerCase(ProjectCreateUpdateDto projectDto) {
+        ListIterator<String> iteratorWriteUsers = projectDto.getWriteUsers().listIterator();
+        while (iteratorWriteUsers.hasNext())
+        {
+            iteratorWriteUsers.set(iteratorWriteUsers.next().toLowerCase());
+        }
+        ListIterator<String> iteratorReadUsers = projectDto.getReadUsers().listIterator();
+        while (iteratorReadUsers.hasNext())
+        {
+            iteratorReadUsers.set(iteratorReadUsers.next().toLowerCase());
+        }
     }
 
     private void assertValidUserIds(Collection<String> userIds) throws ValidationErrorException {

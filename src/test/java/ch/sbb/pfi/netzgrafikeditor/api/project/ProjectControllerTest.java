@@ -27,18 +27,26 @@ class ProjectControllerTest {
         assertTrue(isUserIdAsEmailPatternValid("1234@1234.org"),"1234@1234.org should be valid");
         assertTrue(isUserIdAsEmailPatternValid("123a4@1234.org"),"123a4@1234.org should be valid");
         assertTrue(isUserIdAsEmailPatternValid("123a4@1234abc123zsd.a123sb.org"),"123a4@1234.org should be valid");
+        assertTrue(isUserIdAsEmailPatternValid("Franz@nix.com"),"Franz@nix.com should be valid");
+        assertTrue(isUserIdAsEmailPatternValid("Adrian@ai.org"),"adrian@ai.org should be valid");
+        assertTrue(isUserIdAsEmailPatternValid("aDrian@ai.org"),"adrian@ai.org should be valid");
+        assertTrue(isUserIdAsEmailPatternValid("ADRIAN@AI.ORG"),"adrian@ai.org should be valid");
+        assertTrue(isUserIdAsEmailPatternValid("adrian@AI.ORG"),"adrian@ai.org should be valid");
+        assertTrue(isUserIdAsEmailPatternValid("adri+an@ai.ORG"),"adri+an@ai.org should be valid");
+        assertTrue(isUserIdAsEmailPatternValid("ad+ri-an@AI.org"),"ad+ri-an@ai.org should be valid");
+        assertTrue(isUserIdAsEmailPatternValid("ad+ri-an@A-I.org"),"ad+ri-an@a-i.org should be valid");
 
-        assertFalse(isUserIdAsEmailPatternValid("Franz@nix.com"),"Franz@nix.com should be invalid");
+        assertTrue(isUserIdAsEmailPatternValid("u123456"),"u123456 should be valid");
+        assertTrue(isUserIdAsEmailPatternValid("u000000"),"u000000 should be valid");
+        assertTrue(isUserIdAsEmailPatternValid("ue122322"),"ue122322 should be valid");
+        assertTrue(isUserIdAsEmailPatternValid("e123211"),"e123211 should be valid");
+        assertTrue(isUserIdAsEmailPatternValid("u123456"),"u123456 should be invalid");
+
         assertFalse(isUserIdAsEmailPatternValid("blabla"),"blabla should be invalid");
-        assertFalse(isUserIdAsEmailPatternValid("u123456"),"u123456 should be invalid");
         assertFalse(isUserIdAsEmailPatternValid("name.vorname.vorname2#mail.domain.ch"),"name.vorname.vorname2#mail.domain.ch should be invalid");
         assertFalse(isUserIdAsEmailPatternValid(""),"'' should be invalid");
-        assertFalse(isUserIdAsEmailPatternValid("Adrian@ai.org"),"adrian@ai.org should be invalid");
-        assertFalse(isUserIdAsEmailPatternValid("aDrian@ai.org"),"adrian@ai.org should be invalid");
-        assertFalse(isUserIdAsEmailPatternValid("ADRIAN@AI.ORG"),"adrian@ai.org should be invalid");
-        assertFalse(isUserIdAsEmailPatternValid("adrian@AI.ORG"),"adrian@ai.org should be invalid");
-        assertFalse(isUserIdAsEmailPatternValid("adrian@ai.ORG"),"adrian@ai.org should be invalid");
-        assertFalse(isUserIdAsEmailPatternValid("adrian@AI.org"),"adrian@ai.org should be invalid");
-        assertFalse(isUserIdAsEmailPatternValid("adrian@ai.orG"),"adrian@ai.org should be invalid");
+        assertFalse(isUserIdAsEmailPatternValid("u12345z"),"u12345z should be invalid");
+        assertFalse(isUserIdAsEmailPatternValid("ua122322"),"ua122322 should be invalid");
+        assertFalse(isUserIdAsEmailPatternValid("U123211"),"U123211 should be invalid");
     }
 }
