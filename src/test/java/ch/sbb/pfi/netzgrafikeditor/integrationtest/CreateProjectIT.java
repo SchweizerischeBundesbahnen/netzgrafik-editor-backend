@@ -95,6 +95,9 @@ public class CreateProjectIT extends IntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonResponse(expectedResponse.withIsWritable(false)));
 
+
+        System.out.println('ADRIAN');
+        System.out.println(location);
         mockMvc.perform(
                         get(location)
                                 .contentType(MediaType.APPLICATION_JSON)
