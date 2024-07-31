@@ -97,6 +97,7 @@ public class CreateProjectIT extends IntegrationTest {
 
         System.out.println("ADRIAN");
         System.out.println(location);
+        System.out.println(expectedResponse);
         mockMvc.perform(
                         get(location)
                                 .contentType(MediaType.APPLICATION_JSON)
