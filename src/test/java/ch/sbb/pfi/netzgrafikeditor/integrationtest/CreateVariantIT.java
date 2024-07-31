@@ -103,7 +103,7 @@ public class CreateVariantIT extends IntegrationTest {
                                 .with(
                                         UserHelper.user(
                                                 ProjectTestData.USER_C, SecurityConfig.USER_ROLE)))
-                .andExpect(status().isForbidden());
+                .andExpect(status().isNotFound());
     }
 
     @Test

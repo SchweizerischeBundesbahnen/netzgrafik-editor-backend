@@ -12,8 +12,8 @@ public class FetchProjectTestData {
 
     private static final LocalDateTime DATE = LocalDateTime.of(2021, 9, 1, 17, 25, 38);
 
-    public static final String USER_A = "u123456";
-    public static final String USER_B = "u654321";
+    public static final String USER_A = "u123456@sbb.ch";
+    public static final String USER_B = "u654321@sbb.ch";
 
     public static final ProjectsRecord PROJECT =
             new ProjectsRecord()

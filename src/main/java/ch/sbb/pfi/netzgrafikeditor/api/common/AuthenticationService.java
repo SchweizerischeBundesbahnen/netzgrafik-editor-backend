@@ -20,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Value;
 import lombok.val;
 
+import org.jooq.Condition;
 import org.jooq.DSLContext;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.GrantedAuthority;
@@ -32,20 +33,36 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
-    private static final String USER_ID_CLAIM = "sub";
-    private static final String EMAIL_CLAIM = "preferred_username";
+
+    // See: https://openid.net/specs/openid-connect-core-1_0.html#Claims
+    private static final String USER_ID_FROM_EMAIL_CLAIM = "email";
+    private static final String Subject_Identifier_CLAIM = "sub";
+    private static final String PREFERRED_USERNAME_CLAIM = "preferred_username";
 
     private final DSLContext context;
 
     public String getCurrentUserEmail() {
-        return this.tryGetClaim(EMAIL_CLAIM)
-                .orElseThrow(() -> new BadCredentialsException("E-Mail missing in token"));
+        return this.tryGetClaim(PREFERRED_USERNAME_CLAIM)
+                .orElseThrow(() -> new BadCredentialsException("E-Mail missing in token"))
+                .toLowerCase();
     }
 
-    public UserId getCurrentUserId() {
+    public UserId getCurrentUserIdFromEmail() {
         val idString =
-                this.tryGetClaim(USER_ID_CLAIM)
-                        .orElseThrow(() -> new BadCredentialsException("User ID missing in token"));
+                this.tryGetClaim(USER_ID_FROM_EMAIL_CLAIM)
+                        .orElseThrow(() -> new BadCredentialsException("User ID missing in token"))
+                        .toLowerCase();
+
+        return UserId.of(idString);
+    }
+
+    public UserId getCurrentSubjectId() {
+        val idString =
+                this.tryGetClaim(Subject_Identifier_CLAIM)
+                        .orElseThrow(
+                                () ->
+                                        new BadCredentialsException(
+                                                "Sub identifier missing in token"));
 
         return UserId.of(idString);
     }
@@ -66,14 +83,26 @@ public class AuthenticationService {
     }
 
     public AuthorizationInfo getAuthorizationInfo(ProjectId projectId) throws NotFoundException {
+        Condition whereCondition =
+                this.isAdmin()
+                        ? PROJECTS.ID.eq(projectId.getValue())
+                        : PROJECTS.ID
+                                .eq(projectId.getValue())
+                                .and(
+                                        PROJECTS_USERS
+                                                .USER_ID
+                                                .eq(this.getCurrentUserIdFromEmail().getValue())
+                                                .or(
+                                                        PROJECTS_USERS.USER_ID.eq(
+                                                                this.getCurrentSubjectId()
+                                                                        .getValue())));
         return this.context
                 .select(PROJECTS.IS_ARCHIVED, PROJECTS_USERS.IS_EDITOR)
                 .from(PROJECTS)
                 .leftJoin(PROJECTS_USERS)
-                .on(
-                        PROJECTS_USERS.PROJECT_ID.eq(PROJECTS.ID),
-                        PROJECTS_USERS.USER_ID.eq(this.getCurrentUserId().getValue()))
-                .where(PROJECTS.ID.eq(projectId.getValue()))
+                .on(PROJECTS_USERS.PROJECT_ID.eq(PROJECTS.ID))
+                .where(whereCondition)
+                .limit(1)
                 .fetchOptional()
                 .map(
                         record -> {
@@ -86,16 +115,28 @@ public class AuthenticationService {
     }
 
     public AuthorizationInfo getAuthorizationInfo(VariantId variantId) throws NotFoundException {
+        Condition whereCondition =
+                this.isAdmin()
+                        ? VARIANTS.ID.eq(variantId.getValue())
+                        : VARIANTS.ID
+                                .eq(variantId.getValue())
+                                .and(
+                                        PROJECTS_USERS
+                                                .USER_ID
+                                                .eq(this.getCurrentUserIdFromEmail().getValue())
+                                                .or(
+                                                        PROJECTS_USERS.USER_ID.eq(
+                                                                this.getCurrentSubjectId()
+                                                                        .getValue())));
         return this.context
                 .select(PROJECTS.IS_ARCHIVED, VARIANTS.IS_ARCHIVED, PROJECTS_USERS.IS_EDITOR)
                 .from(PROJECTS)
                 .join(VARIANTS)
                 .on(VARIANTS.PROJECT_ID.eq(PROJECTS.ID))
                 .leftJoin(PROJECTS_USERS)
-                .on(
-                        PROJECTS_USERS.PROJECT_ID.eq(PROJECTS.ID),
-                        PROJECTS_USERS.USER_ID.eq(this.getCurrentUserId().getValue()))
-                .where(VARIANTS.ID.eq(variantId.getValue()))
+                .on(PROJECTS_USERS.PROJECT_ID.eq(PROJECTS.ID))
+                .where(whereCondition)
+                .limit(1)
                 .fetchOptional()
                 .map(
                         record -> {
@@ -112,6 +153,19 @@ public class AuthenticationService {
     }
 
     public AuthorizationInfo getAuthorizationInfo(VersionId versionId) throws NotFoundException {
+        Condition whereCondition =
+                this.isAdmin()
+                        ? VERSIONS.ID.eq(versionId.getValue())
+                        : VERSIONS.ID
+                                .eq(versionId.getValue())
+                                .and(
+                                        PROJECTS_USERS
+                                                .USER_ID
+                                                .eq(this.getCurrentUserIdFromEmail().getValue())
+                                                .or(
+                                                        PROJECTS_USERS.USER_ID.eq(
+                                                                this.getCurrentSubjectId()
+                                                                        .getValue())));
         return this.context
                 .select(PROJECTS.IS_ARCHIVED, VARIANTS.IS_ARCHIVED, PROJECTS_USERS.IS_EDITOR)
                 .from(PROJECTS)
@@ -120,10 +174,9 @@ public class AuthenticationService {
                 .join(VERSIONS)
                 .on(VERSIONS.VARIANT_ID.eq(VARIANTS.ID))
                 .leftJoin(PROJECTS_USERS)
-                .on(
-                        PROJECTS_USERS.PROJECT_ID.eq(PROJECTS.ID),
-                        PROJECTS_USERS.USER_ID.eq(this.getCurrentUserId().getValue()))
-                .where(VERSIONS.ID.eq(versionId.getValue()))
+                .on(PROJECTS_USERS.PROJECT_ID.eq(PROJECTS.ID))
+                .where(whereCondition)
+                .limit(1)
                 .fetchOptional()
                 .map(
                         record -> {

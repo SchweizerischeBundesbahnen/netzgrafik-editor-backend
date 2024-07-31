@@ -15,11 +15,11 @@ import java.util.stream.Collectors;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class UserHelper {
-    public static RequestPostProcessor user(String sub, String... authorityNames) {
+    public static RequestPostProcessor user(String email, String... authorityNames) {
         Collection<GrantedAuthority> authorities =
                 Arrays.stream(authorityNames)
                         .map(SimpleGrantedAuthority::new)
                         .collect(Collectors.toList());
-        return jwt().authorities(authorities).jwt(jwt -> jwt.claim("sub", sub));
+        return jwt().authorities(authorities).jwt(jwt -> jwt.claim("email", email));
     }
 }

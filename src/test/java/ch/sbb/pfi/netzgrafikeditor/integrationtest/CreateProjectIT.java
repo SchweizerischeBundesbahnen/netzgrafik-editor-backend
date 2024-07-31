@@ -99,7 +99,7 @@ public class CreateProjectIT extends IntegrationTest {
                         get(location)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .with(user(USER_C, SecurityConfig.USER_ROLE)))
-                .andExpect(status().isForbidden());
+                .andExpect(status().isNotFound());
 
         mockMvc.perform(
                         get(location)

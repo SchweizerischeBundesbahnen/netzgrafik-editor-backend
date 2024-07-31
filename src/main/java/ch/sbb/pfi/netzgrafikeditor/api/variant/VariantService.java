@@ -50,7 +50,7 @@ public class VariantService {
         this.authenticationService.getAuthorizationInfo(projectId).assertWritable();
 
         val now = this.nowProvider.now();
-        val userId = this.authenticationService.getCurrentUserId();
+        val userId = this.authenticationService.getCurrentUserIdFromEmail();
 
         val variantRecord =
                 this.context
@@ -131,7 +131,7 @@ public class VariantService {
         this.authenticationService.getAuthorizationInfo(projectId).assertWritable();
 
         val now = this.nowProvider.now();
-        val userId = this.authenticationService.getCurrentUserId();
+        val userId = this.authenticationService.getCurrentUserIdFromEmail();
 
         val variantRecord =
                 this.context
@@ -206,7 +206,7 @@ public class VariantService {
     public void dropSnapshots(VariantId variantId) throws NotFoundException {
         assertVariantExists(variantId);
 
-        val userId = this.authenticationService.getCurrentUserId();
+        val userId = this.authenticationService.getCurrentUserIdFromEmail();
 
         if (this.hasReleases(variantId)) {
             this.deleteAllSnapshots(variantId, userId);
@@ -217,7 +217,14 @@ public class VariantService {
                     .where(
                             VERSIONS.VARIANT_ID
                                     .eq(variantId.getValue())
-                                    .and(VERSIONS.CREATED_BY.eq(userId.getValue()))
+                                    .and(
+                                            VERSIONS.CREATED_BY
+                                                    .eq(userId.getValue())
+                                                    .or(
+                                                            VERSIONS.CREATED_BY.eq(
+                                                                    this.authenticationService
+                                                                            .getCurrentSubjectId()
+                                                                            .getValue())))
                                     .and(VERSIONS.SNAPSHOT_VERSION.isNotNull())
                                     .and(VERSIONS.SNAPSHOT_VERSION.notEqual(1))
                                     .and(VERSIONS.RELEASE_VERSION.eq(1)))
@@ -236,7 +243,7 @@ public class VariantService {
         assertVariantExists(variantId);
         assertHasReleases(variantId);
 
-        val userId = this.authenticationService.getCurrentUserId();
+        val userId = this.authenticationService.getCurrentUserIdFromEmail();
 
         val highestReleasedVersion =
                 this.tryFetchHighestReleaseVersion(variantId)
