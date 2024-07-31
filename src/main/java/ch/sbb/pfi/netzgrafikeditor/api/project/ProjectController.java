@@ -93,15 +93,15 @@ public class ProjectController {
     }
 
     private void convertAllUsersToLowerCase(ProjectCreateUpdateDto projectDto) {
-        ListIterator<String> iterator = projectDto.getWriteUsers().listIterator();
-        while (iterator.hasNext())
+        ListIterator<String> iteratorWriteUsers = projectDto.getWriteUsers().listIterator();
+        while (iteratorWriteUsers.hasNext())
         {
-            iterator.set(iterator.next().toLowerCase());
+            iteratorWriteUsers.set(iterator.next().toLowerCase());
         }
-        ListIterator<String> iterator = projectDto.getReadUsers().listIterator();
-        while (iterator.hasNext())
+        ListIterator<String> iteratorReadUsers = projectDto.getReadUsers().listIterator();
+        while (iteratorReadUsers.hasNext())
         {
-            iterator.set(iterator.next().toLowerCase());
+            iteratorReadUsers.set(iterator.next().toLowerCase());
         }
     }
 
