@@ -43,13 +43,15 @@ public class AuthenticationService {
 
     public String getCurrentUserEmail() {
         return this.tryGetClaim(PREFERRED_USERNAME_CLAIM)
-                .orElseThrow(() -> new BadCredentialsException("E-Mail missing in token"));
+                .orElseThrow(() -> new BadCredentialsException("E-Mail missing in token"))
+                .toUpperCase();
     }
 
     public UserId getCurrentUserIdFromEmail() {
         val idString =
                 this.tryGetClaim(USER_ID_FROM_EMAIL_CLAIM)
-                        .orElseThrow(() -> new BadCredentialsException("User ID missing in token"));
+                        .orElseThrow(() -> new BadCredentialsException("User ID missing in token"))
+                        .toUpperCase();
 
         return UserId.of(idString);
     }
