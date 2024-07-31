@@ -58,8 +58,11 @@ public class AuthenticationService {
 
     public UserId getCurrentSubjectId() {
         val idString =
-            this.tryGetClaim(Subject_Identifier_CLAIM)
-                .orElseThrow(() -> new BadCredentialsException("Sub identifier missing in token"));
+                this.tryGetClaim(Subject_Identifier_CLAIM)
+                        .orElseThrow(
+                                () ->
+                                        new BadCredentialsException(
+                                                "Sub identifier missing in token"));
 
         return UserId.of(idString);
     }
@@ -80,19 +83,24 @@ public class AuthenticationService {
     }
 
     public AuthorizationInfo getAuthorizationInfo(ProjectId projectId) throws NotFoundException {
-        Condition whereCondition = this.isAdmin() ?
-            PROJECTS.ID.eq(projectId.getValue()) :
-            PROJECTS.ID.eq(projectId.getValue()).and(
-            PROJECTS_USERS.USER_ID.eq(this.getCurrentUserIdFromEmail().getValue()).or(
-                PROJECTS_USERS.USER_ID.eq(this.getCurrentSubjectId().getValue())
-            )
-        );
+        Condition whereCondition =
+                this.isAdmin()
+                        ? PROJECTS.ID.eq(projectId.getValue())
+                        : PROJECTS.ID
+                                .eq(projectId.getValue())
+                                .and(
+                                        PROJECTS_USERS
+                                                .USER_ID
+                                                .eq(this.getCurrentUserIdFromEmail().getValue())
+                                                .or(
+                                                        PROJECTS_USERS.USER_ID.eq(
+                                                                this.getCurrentSubjectId()
+                                                                        .getValue())));
         return this.context
                 .select(PROJECTS.IS_ARCHIVED, PROJECTS_USERS.IS_EDITOR)
                 .from(PROJECTS)
                 .leftJoin(PROJECTS_USERS)
-                .on(
-                        PROJECTS_USERS.PROJECT_ID.eq(PROJECTS.ID))
+                .on(PROJECTS_USERS.PROJECT_ID.eq(PROJECTS.ID))
                 .where(whereCondition)
                 .limit(1)
                 .fetchOptional()
@@ -107,21 +115,26 @@ public class AuthenticationService {
     }
 
     public AuthorizationInfo getAuthorizationInfo(VariantId variantId) throws NotFoundException {
-        Condition whereCondition = this.isAdmin() ?
-            VARIANTS.ID.eq(variantId.getValue()) :
-            VARIANTS.ID.eq(variantId.getValue()).and(
-                PROJECTS_USERS.USER_ID.eq(this.getCurrentUserIdFromEmail().getValue()).or(
-                    PROJECTS_USERS.USER_ID.eq(this.getCurrentSubjectId().getValue())
-                )
-            );
+        Condition whereCondition =
+                this.isAdmin()
+                        ? VARIANTS.ID.eq(variantId.getValue())
+                        : VARIANTS.ID
+                                .eq(variantId.getValue())
+                                .and(
+                                        PROJECTS_USERS
+                                                .USER_ID
+                                                .eq(this.getCurrentUserIdFromEmail().getValue())
+                                                .or(
+                                                        PROJECTS_USERS.USER_ID.eq(
+                                                                this.getCurrentSubjectId()
+                                                                        .getValue())));
         return this.context
                 .select(PROJECTS.IS_ARCHIVED, VARIANTS.IS_ARCHIVED, PROJECTS_USERS.IS_EDITOR)
                 .from(PROJECTS)
                 .join(VARIANTS)
                 .on(VARIANTS.PROJECT_ID.eq(PROJECTS.ID))
                 .leftJoin(PROJECTS_USERS)
-                .on(
-                        PROJECTS_USERS.PROJECT_ID.eq(PROJECTS.ID))
+                .on(PROJECTS_USERS.PROJECT_ID.eq(PROJECTS.ID))
                 .where(whereCondition)
                 .limit(1)
                 .fetchOptional()
@@ -140,13 +153,19 @@ public class AuthenticationService {
     }
 
     public AuthorizationInfo getAuthorizationInfo(VersionId versionId) throws NotFoundException {
-        Condition whereCondition = this.isAdmin() ?
-            VERSIONS.ID.eq(versionId.getValue()) :
-            VERSIONS.ID.eq(versionId.getValue()).and(
-            PROJECTS_USERS.USER_ID.eq(this.getCurrentUserIdFromEmail().getValue()).or(
-                PROJECTS_USERS.USER_ID.eq(this.getCurrentSubjectId().getValue())
-            )
-        );
+        Condition whereCondition =
+                this.isAdmin()
+                        ? VERSIONS.ID.eq(versionId.getValue())
+                        : VERSIONS.ID
+                                .eq(versionId.getValue())
+                                .and(
+                                        PROJECTS_USERS
+                                                .USER_ID
+                                                .eq(this.getCurrentUserIdFromEmail().getValue())
+                                                .or(
+                                                        PROJECTS_USERS.USER_ID.eq(
+                                                                this.getCurrentSubjectId()
+                                                                        .getValue())));
         return this.context
                 .select(PROJECTS.IS_ARCHIVED, VARIANTS.IS_ARCHIVED, PROJECTS_USERS.IS_EDITOR)
                 .from(PROJECTS)
@@ -155,8 +174,7 @@ public class AuthenticationService {
                 .join(VERSIONS)
                 .on(VERSIONS.VARIANT_ID.eq(VARIANTS.ID))
                 .leftJoin(PROJECTS_USERS)
-                .on(
-                        PROJECTS_USERS.PROJECT_ID.eq(PROJECTS.ID))
+                .on(PROJECTS_USERS.PROJECT_ID.eq(PROJECTS.ID))
                 .where(whereCondition)
                 .limit(1)
                 .fetchOptional()

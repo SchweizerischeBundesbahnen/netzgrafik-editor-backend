@@ -59,7 +59,8 @@ public class ProjectService {
                         .setDescription(project.getDescription())
                         .setIsArchived(false)
                         .setCreatedAt(nowProvider.now())
-                        .setCreatedBy(this.authenticationService.getCurrentUserIdFromEmail().getValue());
+                        .setCreatedBy(
+                                this.authenticationService.getCurrentUserIdFromEmail().getValue());
 
         record.store();
 
@@ -184,15 +185,22 @@ public class ProjectService {
                         : selectOne()
                                 .from(PROJECTS_USERS)
                                 .where(
-                                        PROJECTS_USERS.PROJECT_ID.eq(PROJECTS.ID).and(
-                                        PROJECTS_USERS.USER_ID.eq(
-                                                this.authenticationService
-                                                        .getCurrentUserIdFromEmail()
-                                                        .getValue()).or(
-                                                            PROJECTS_USERS.USER_ID.eq(
-                                                            this.authenticationService
-                                                                .getCurrentSubjectId()
-                                                                .getValue()))));
+                                        PROJECTS_USERS
+                                                .PROJECT_ID
+                                                .eq(PROJECTS.ID)
+                                                .and(
+                                                        PROJECTS_USERS
+                                                                .USER_ID
+                                                                .eq(
+                                                                        this.authenticationService
+                                                                                .getCurrentUserIdFromEmail()
+                                                                                .getValue())
+                                                                .or(
+                                                                        PROJECTS_USERS.USER_ID.eq(
+                                                                                this
+                                                                                        .authenticationService
+                                                                                        .getCurrentSubjectId()
+                                                                                        .getValue()))));
 
         return this.context
                 .selectFrom(PROJECTS)
@@ -233,8 +241,7 @@ public class ProjectService {
                 this.getLatestSnapshotVersions(
                         projectId,
                         authenticationService.getCurrentUserIdFromEmail(),
-                        authenticationService.getCurrentSubjectId()
-                    )) {
+                        authenticationService.getCurrentSubjectId())) {
             variantsMap
                     .get(snapshotVersion.getVariantId())
                     .latestSnapshotVersion(Optional.of(snapshotVersion));
@@ -313,7 +320,8 @@ public class ProjectService {
                 .collect(Collectors.toList());
     }
 
-    private List<VersionDto> getLatestSnapshotVersions(ProjectId projectId, UserId userId, UserId subId) {
+    private List<VersionDto> getLatestSnapshotVersions(
+            ProjectId projectId, UserId userId, UserId subId) {
         return this.context
                 .select(VERSIONS.asterisk())
                 .distinctOn(VERSIONS.VARIANT_ID)
@@ -323,7 +331,9 @@ public class ProjectService {
                 .where(
                         VARIANTS.PROJECT_ID.eq(projectId.getValue()),
                         VERSIONS.SNAPSHOT_VERSION.isNotNull(),
-                        VERSIONS.CREATED_BY.eq(userId.getValue()).or(VERSIONS.CREATED_BY.eq(subId.getValue())))
+                        VERSIONS.CREATED_BY
+                                .eq(userId.getValue())
+                                .or(VERSIONS.CREATED_BY.eq(subId.getValue())))
                 .orderBy(
                         VERSIONS.VARIANT_ID,
                         VERSIONS.RELEASE_VERSION.desc(),

@@ -250,7 +250,9 @@ public class VersionService {
                         or(
                                 VERSIONS.SNAPSHOT_VERSION.isNull(),
                                 VERSIONS.CREATED_BY.eq(
-                                    authenticationService.getCurrentUserIdFromEmail().getValue()),
+                                        authenticationService
+                                                .getCurrentUserIdFromEmail()
+                                                .getValue()),
                                 VERSIONS.CREATED_BY.eq(
                                         authenticationService.getCurrentSubjectId().getValue())))
                 .orderBy(
@@ -277,11 +279,16 @@ public class VersionService {
                         .where(
                                 VERSIONS.VARIANT_ID.eq(variantId.getValue()),
                                 VERSIONS.SNAPSHOT_VERSION.isNotNull(),
-                                VERSIONS.CREATED_BY.eq(
-                                        this.authenticationService.getCurrentUserIdFromEmail().getValue()).or(
-                                    VERSIONS.CREATED_BY.eq(
-                                        authenticationService.getCurrentSubjectId().getValue())
-                                ))
+                                VERSIONS.CREATED_BY
+                                        .eq(
+                                                this.authenticationService
+                                                        .getCurrentUserIdFromEmail()
+                                                        .getValue())
+                                        .or(
+                                                VERSIONS.CREATED_BY.eq(
+                                                        authenticationService
+                                                                .getCurrentSubjectId()
+                                                                .getValue())))
                         .orderBy(VERSIONS.RELEASE_VERSION.desc(), VERSIONS.SNAPSHOT_VERSION.desc())
                         .limit(1)
                         .fetchOptional(this::mapVersion);

@@ -26,9 +26,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.Collection;
+import java.util.ListIterator;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import java.util.ListIterator;
 
 @RestController
 @RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE)
@@ -38,7 +38,8 @@ public class ProjectController {
 
     // email adress validator: regex to match emails using the expression
     protected static Pattern USER_ID_AS_EMAIL_PATTERN =
-        Pattern.compile("^([a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*)|(u|ue|e)\\d+$");
+            Pattern.compile(
+                    "^([a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*)|(u|ue|e)\\d+$");
 
     @PostMapping("/v1/projects")
     public ResponseEntity<Long> createProject(@RequestBody ProjectCreateUpdateDto projectDto)
@@ -94,13 +95,11 @@ public class ProjectController {
 
     private void convertAllUsersToLowerCase(ProjectCreateUpdateDto projectDto) {
         ListIterator<String> iteratorWriteUsers = projectDto.getWriteUsers().listIterator();
-        while (iteratorWriteUsers.hasNext())
-        {
+        while (iteratorWriteUsers.hasNext()) {
             iteratorWriteUsers.set(iteratorWriteUsers.next().toLowerCase());
         }
         ListIterator<String> iteratorReadUsers = projectDto.getReadUsers().listIterator();
-        while (iteratorReadUsers.hasNext())
-        {
+        while (iteratorReadUsers.hasNext()) {
             iteratorReadUsers.set(iteratorReadUsers.next().toLowerCase());
         }
     }
