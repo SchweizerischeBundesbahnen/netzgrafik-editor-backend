@@ -14,7 +14,7 @@ jobs:
   release-please:
     runs-on: ubuntu-latest
     outputs:
-      releases_created: ${{ steps.release.outputs.releases_created }}
+      release_created: ${{ steps.release.outputs.release_created }}
       major: ${{ steps.release.outputs.major }}
       minor: ${{ steps.release.outputs.minor }}
       patch: ${{ steps.release.outputs.patch }}
@@ -26,7 +26,7 @@ jobs:
 
   release:
     needs: release-please
-    if: ${{ needs.release-please.outputs.releases_created }}
+    if: ${{ needs.release-please.outputs.release_created }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
