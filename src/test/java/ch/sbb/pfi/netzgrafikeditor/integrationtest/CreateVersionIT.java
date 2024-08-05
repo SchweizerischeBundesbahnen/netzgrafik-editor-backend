@@ -28,6 +28,7 @@ import java.util.Optional;
 
 public class CreateVersionIT extends IntegrationTest {
 
+
     @BeforeEach
     protected void insertTestData() {
         testDataService.insertTestData(
