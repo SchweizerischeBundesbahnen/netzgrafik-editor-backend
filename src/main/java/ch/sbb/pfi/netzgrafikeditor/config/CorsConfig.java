@@ -19,6 +19,7 @@ public class CorsConfig {
 
 
 
+
     @Value("${endpoints.web.cors.path-mappings}")
     private String pathMappings;
 
