@@ -34,6 +34,7 @@ import java.util.stream.Collectors;
 @RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
 public class ProjectController {
+
     private final ProjectService projectService;
 
     // email adress validator: regex to match emails using the expression
