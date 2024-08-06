@@ -78,3 +78,8 @@ This repository includes a [CODING_STANDARDS.md](CODING_STANDARDS.md) file that 
 ## Code of Conduct
 
 To ensure that your project is a welcoming and inclusive environment for all contributors, you should establish a good [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)
+
+## Continuous Integration
+
+This repository uses [release-please](https://github.com/googleapis/release-please) for CHANGELOG generation, the creation of GitHub releases, and version bumps for your projects.
+See [CI.md](CONTRIBUTING.md) for details.
