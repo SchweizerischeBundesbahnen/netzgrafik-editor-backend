@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.7.2](https://github.com/SchweizerischeBundesbahnen/netzgrafik-editor-backend/compare/v2.7.2...v2.7.2) (2025-05-21)
+
+
+### Documentation
+
+* **CODE_OF_CONDUCT:** update email address ([574af72](https://github.com/SchweizerischeBundesbahnen/netzgrafik-editor-backend/commit/574af72ee6324d7e2d907a2302ce538729cb2de3))
+
 ## 2.7.2 (2024-08-06)
 
 
